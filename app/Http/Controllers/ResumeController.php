@@ -6,6 +6,7 @@ use App\Skill;
 use App\User;
 use PDF;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ResumeController extends Controller
 {
@@ -32,6 +33,15 @@ class ResumeController extends Controller
         $frontends = Skill::where('category_id' , 1)->get();
         $backends = Skill::where('category_id' , 2)->get();
         $others = Skill::where('category_id' , 3)->get();
+
+        $works = $user->experiences()->orderBy('id', 'desc')->get()->map(function ($exp) {
+            $joinDate = Carbon::parse($exp->join_date);
+            $endDate = $exp->end_date ? Carbon::parse($exp->end_date) : Carbon::now();
+            $diff = $joinDate->diff($endDate);
+
+            $exp->duration = $diff->y . ' years' . ($diff->m ? ', ' . $diff->m . ' months' : '');
+            return $exp;
+        });
 
         $customPaper = array(0,0,1000,2200);
 

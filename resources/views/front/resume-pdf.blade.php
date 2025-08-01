@@ -145,10 +145,9 @@
                                     </tr>
 
                                 </table>
-                                <p class="join-date">{{$company->join_date}} - @if ($company->end_date != null)
-                                    {{$company->end_date}}
-                                    @else Present
-                                    @endif</p>
+                                <p class="join-date">
+                                    {{ $company->join_date }} - {{ $company->end_date ?? 'Present' }} ({{ $company->duration }})
+                                </p>
                                 <p class="pr1 text-align-justify">{!! $company->description !!}
                                 </p>
 
